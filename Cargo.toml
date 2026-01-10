@@ -25,6 +25,6 @@ rustc-hex = "2"
 wasm-bindgen-test = "0.3.33"
 
 [features]
-default = ["zero_hash_cache", "ring"]
+default = ["zero_hash_cache"]
 zero_hash_cache = []
 ring = ["dep:ring"]
