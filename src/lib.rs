@@ -7,6 +7,12 @@
 //! Now this crate serves primarily as a wrapper over two SHA256 crates: `sha2` and `ring` – which
 //! it switches between at runtime based on the availability of SHA intrinsics.
 
+#![no_std]
+
+extern crate alloc;
+
+use alloc::vec::Vec;
+
 mod sha2_impl;
 
 pub use self::DynamicContext as Context;
@@ -14,7 +20,7 @@ pub use self::DynamicContext as Context;
 use sha2_impl::Sha2CrateImpl;
 
 #[cfg(feature = "zero_hash_cache")]
-use std::sync::LazyLock;
+use spin::Lazy;
 
 /// Length of a SHA256 hash in bytes.
 pub const HASH_LEN: usize = 32;
@@ -126,8 +132,8 @@ pub const ZERO_HASHES_MAX_INDEX: usize = 48;
 
 #[cfg(feature = "zero_hash_cache")]
 /// Cached zero hashes where `ZERO_HASHES[i]` is the hash of a Merkle tree with 2^i zero leaves.
-pub static ZERO_HASHES: LazyLock<Vec<[u8; HASH_LEN]>> = LazyLock::new(|| {
-    let mut hashes = vec![[0; HASH_LEN]; ZERO_HASHES_MAX_INDEX + 1];
+pub static ZERO_HASHES: Lazy<Vec<[u8; HASH_LEN]>> = Lazy::new(|| {
+    let mut hashes = alloc::vec![[0; HASH_LEN]; ZERO_HASHES_MAX_INDEX + 1];
 
     for i in 0..ZERO_HASHES_MAX_INDEX {
         hashes[i + 1] = hash32_concat(&hashes[i], &hashes[i]);

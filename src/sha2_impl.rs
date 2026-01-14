@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 use crate::{Sha256, Sha256Context, HASH_LEN};
 use sha2::Digest;
 

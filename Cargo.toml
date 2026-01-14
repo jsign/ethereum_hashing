@@ -13,6 +13,7 @@ rust-version = "1.80.0"
 
 [dependencies]
 sha2 = { version = "0.10", default-features = false }
+spin = { version = "0.9", default-features = false, features = ["lazy"], optional = true }
 
 [dev-dependencies]
 rustc-hex = "2"
@@ -22,5 +23,5 @@ wasm-bindgen-test = "0.3.33"
 
 [features]
 default = ["zero_hash_cache"]
-zero_hash_cache = []
+zero_hash_cache = ["spin"]
 ring = []
